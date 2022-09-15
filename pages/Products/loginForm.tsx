@@ -52,7 +52,7 @@ const Login: FC<Props> = () => {
 
   return (
     <Flex bg="gray.100" align="center" justify="center" h="100vh">
-      <Box bg="white" p={6} rounded="md" w="50vh" h="40vh">
+      <Box bg="white" p={6} rounded="md" w="vh" h="vh">
         <FormTemplate
           initialValues={initialValues}
           schema={schema}

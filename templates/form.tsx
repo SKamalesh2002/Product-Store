@@ -3,14 +3,14 @@ import { FC } from "react";
 import {
   Button,
   FormControl,
-  FormErrorMessage,
   FormLabel,
   Input,
   Select,
   Text,
   VStack,
 } from "@chakra-ui/react";
-import { urlToHttpOptions } from "url";
+
+import Link from "next/link";
 
 interface field {
   id: number;
@@ -48,6 +48,7 @@ const FormTemplate: FC<Props> = ({
       onSubmit={(values) => onSubmit(values)}
     >
       {(Fields: {
+        value: string | number;
         touched: boolean;
         dirty: boolean;
         isValid: boolean;
@@ -56,7 +57,7 @@ const FormTemplate: FC<Props> = ({
         <Form onSubmit={Fields.handleSubmit}>
           {fields.map((field) => (
             <VStack key={field.id} spacing={10} align="flex-end" h="13vh">
-              <FormControl>
+              <FormControl key={field.id}>
                 <FormLabel htmlFor={field.name}>{field.label}</FormLabel>
                 {field.type !== "select" ? (
                   <Field
@@ -79,8 +80,20 @@ const FormTemplate: FC<Props> = ({
                         {option}
                       </option>
                     ))}
+                    <option key="others" value="others">
+                      Others...
+                    </option>
                   </Field>
                 )}
+                {Fields.value === "Others..." ? (
+                  <Field
+                    as={Input}
+                    id={field.name}
+                    name={field.name}
+                    type={field.type}
+                    variant="filled"
+                  />
+                ) : null}
                 <Text color="red">
                   <ErrorMessage name={field.name} />
                 </Text>
@@ -92,7 +105,6 @@ const FormTemplate: FC<Props> = ({
                 <Button
                   type="submit"
                   w="full"
-                  key={button.id}
                   colorScheme="messenger"
                   disabled={!(Fields.isValid && Fields.dirty && Fields.touched)}
                 >

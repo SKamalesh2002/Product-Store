@@ -39,6 +39,8 @@ function TableHeader({ columns, sortColumn, onSort }: tableHeaderProps) {
         {columns.map((column: column) => (
           <Th
             key={column.path || column.key}
+            fontSize="sm"
+            pt="5"
             cursor="pointer"
             onClick={() => {
               if (column.path) raiseSort(column.path);

@@ -22,19 +22,17 @@ const Pagination: FC<Props> = ({
   return (
     <Flex
       w="max-content"
+      background="white"
       m="1rem"
-      borderLeft="1px"
-      borderTop="1px"
-      borderBottom="1px"
-      borderColor="gray.400"
+      borderColor="gray.100"
       borderRadius="sm"
     >
       {pages.map((pageNumber) => (
         <Box
           key={pageNumber}
           borderRight="1px"
-          borderColor="gray.400"
-          _hover={{ bg: "gray.100" }}
+          borderColor="gray.100"
+          _hover={{ bg: "gray.200" }}
           cursor="pointer"
           pl="2"
           pr="2"

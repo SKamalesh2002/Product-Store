@@ -1,18 +1,26 @@
 import { FC, useState } from "react";
 import FormTemplate from "../../templates/form";
 import * as yup from "yup";
-import { categories } from "../../components/fakeProducts";
+import {
+  categories,
+  saveProducts,
+  Welcome,
+} from "../../components/fakeProducts";
 
 import { Flex, Box } from "@chakra-ui/react";
 
-interface Props {}
+import { useRouter } from "next/router";
+interface Props {
+  data: initialValues;
+}
 
 interface initialValues {
   title: string;
   category: string;
-  price: string;
-  rating: string;
+  price: number;
+  rating: number;
   description: string;
+  image: string;
 }
 
 interface field {
@@ -29,22 +37,34 @@ interface button {
   label: string;
 }
 
-const newProductForm: FC<Props> = () => {
-  const [initialValues] = useState<initialValues>({
-    title: "",
-    category: "",
-    price: "",
-    rating: "",
-    description: "",
-  });
+const NewProductForm: FC<Props> = ({ data }) => {
+  const router = useRouter();
+  const [initialValues] = useState<initialValues>(
+    data
+      ? data
+      : {
+          title: "",
+          category: "",
+          price: 0,
+          rating: 0,
+          description: "",
+          image: "",
+        }
+  );
 
   const schema = yup.object({
     title: yup.string().required("Title Required"),
     category: yup.string().required("Category Required"),
     price: yup.number().required("Price Required"),
-    rating: yup.number().required("Rating Required"),
+    rating: yup
+      .number()
+      .required("Rating Required")
+      .max(5, "Invalid Rating")
+      .min(0, "Invalid Rating"),
+    image: yup.string().url("Not a vaild URL").required("URL Required"),
   });
 
+  const categoryNames = categories.map((category) => category.name);
   const fields = useState<field[]>([
     { id: 0, label: "Title", name: "title", type: "text" },
     {
@@ -52,23 +72,34 @@ const newProductForm: FC<Props> = () => {
       label: "Category",
       name: "category",
       type: "select",
-      options: ["Men", "Women"],
+      options: categoryNames,
     },
     { id: 2, label: "Price", name: "price", type: "number" },
     { id: 3, label: "Rating", name: "rating", type: "number" },
     { id: 4, label: "Description", name: "description", type: "text" },
+    { id: 5, label: "Image", name: "image", type: "text" },
   ]);
 
   const buttons = useState<button[]>([
     { id: 0, name: "submit", label: "Submit" },
   ]);
 
-  const onSubmit = (values: any) => {
-    console.log(values);
+  const onSubmit = (values: initialValues) => {
+    let newProduct = {} as Welcome;
+    newProduct.title = values.title;
+    newProduct.description = values.description;
+    newProduct.price = values.price;
+    newProduct.image = values.image;
+    newProduct.rating = { count: values.rating * 3, rate: values.rating };
+    newProduct.category = { id: -1, name: values.category };
+
+    saveProducts(newProduct);
+
+    router.push("/");
   };
   return (
     <Flex bg="gray.100" align="center" justify="center" h="100vh">
-      <Box bg="white" p={6} rounded="md" w="50vh" h="65vh">
+      <Box bg="white" p={6} rounded="md" w="50vh" h="vh">
         <FormTemplate
           initialValues={initialValues}
           schema={schema}
@@ -81,4 +112,4 @@ const newProductForm: FC<Props> = () => {
   );
 };
 
-export default newProductForm;
+export default NewProductForm;

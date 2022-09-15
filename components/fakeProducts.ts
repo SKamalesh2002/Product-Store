@@ -266,8 +266,11 @@ export function saveProducts(product: Welcome): Welcome | undefined {
   productInDb.rating = product.rating;
   productInDb.description = product.description;
 
-  let category = categories.find((c) => c.name === product.category.name);
+  let category: category | undefined = categories.find(
+    (c) => c.name === product.category.name
+  );
   if (typeof category !== "undefined") productInDb.category = category;
+  else category = { id: Products.length + 1, name: product.category.name };
 
   if (!productInDb.id) {
     productInDb.id = Products.length + 1;

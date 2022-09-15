@@ -21,7 +21,7 @@ interface Props {
 
 function TableLayout({ columns, data, sortColumn, onSort }: Props) {
   return (
-    <TableContainer>
+    <TableContainer background="white" rounded="md">
       <Table variant="simple" size="sm">
         <TableHeader
           columns={columns}
