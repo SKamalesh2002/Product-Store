@@ -67,7 +67,7 @@ const FormTemplate: FC<Props> = ({
                     variant="filled"
                   />
                 ) : (
-                  <Select
+                  <Field
                     id={field.name}
                     name={field.name}
                     as={Select}
@@ -79,7 +79,7 @@ const FormTemplate: FC<Props> = ({
                         {option}
                       </option>
                     ))}
-                  </Select>
+                  </Field>
                 )}
                 <Text color="red">
                   <ErrorMessage name={field.name} />

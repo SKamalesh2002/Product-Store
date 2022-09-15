@@ -56,6 +56,7 @@ const newProductForm: FC<Props> = () => {
     },
     { id: 2, label: "Price", name: "price", type: "number" },
     { id: 3, label: "Rating", name: "rating", type: "number" },
+    { id: 4, label: "Description", name: "description", type: "text" },
   ]);
 
   const buttons = useState<button[]>([
