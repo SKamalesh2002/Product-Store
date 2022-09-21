@@ -1,8 +1,9 @@
 import { Welcome } from "./fakeProducts";
 import TableLayout from "../templates/tableLayout";
 
-import { Button } from "@chakra-ui/react";
+import { Button, Link as LinkTemplate } from "@chakra-ui/react";
 import Link from "next/link";
+
 import { sortColumn } from "../pages/Products/index";
 
 interface Props {
@@ -32,9 +33,14 @@ export default function ProductTable({
       key: "",
       content: (column: Welcome) => {
         return (
-          <Link href={`Products/ProductForm/${column.id}`}>
-            <a>{column.title}</a>
-          </Link>
+          // <Link href={`Products/ProductForm/${column.id}`}>
+          //   <a>
+
+          <LinkTemplate as={Link} href={`Products/ProductForm/${column.id}`}>
+            {column.title}
+          </LinkTemplate>
+          //   </a>
+          // </Link>
         );
       },
     },
@@ -59,7 +65,12 @@ export default function ProductTable({
         return (
           <Link href={`Products/${column.id}`}>
             <a>
-              <Button id={"" + column.id} colorScheme="yellow" size="sm">
+              <Button
+                id={"" + column.id}
+                bgGradient="linear(to-tr, #FFDD00, #FBB034)"
+                _hover={{ bgGradient: "linear(to-tl, #FFDD00, #FBB034)" }}
+                size="sm"
+              >
                 View
               </Button>
             </a>
@@ -73,7 +84,11 @@ export default function ProductTable({
         return (
           <Button
             id={"" + column.id}
-            colorScheme="red"
+            bgGradient="linear(to-tr, #FE5858, #D51A13)"
+            _hover={{
+              bgGradient: "linear(to-tl, #FE5858, #D51A13)",
+            }}
+            textColor="White"
             size="sm"
             onClick={() => onDelete(column)}
           >

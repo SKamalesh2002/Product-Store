@@ -13,7 +13,6 @@ interface Props {
 }
 
 const ListGroup: FC<Props> = ({ categories, onItemSelect, selectedItem }) => {
-  const router = useRouter();
   const handleClick = (category: category): void => {
     onItemSelect(category);
   };
@@ -36,7 +35,17 @@ const ListGroup: FC<Props> = ({ categories, onItemSelect, selectedItem }) => {
           role="group"
           className="list-group-item"
           onClick={() => handleClick(category)}
-          _hover={{ bg: "gray.200" }}
+          {...(selectedItem.name === category.name
+            ? {
+                background: "black",
+                textColor: "white",
+                _hover: { bg: "" },
+              }
+            : {
+                background: "inherit",
+                textColor: "inherit",
+                _hover: { bg: "gray.200" },
+              })}
         >
           {category.name}
         </Flex>

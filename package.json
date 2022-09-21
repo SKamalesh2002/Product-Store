@@ -13,12 +13,18 @@
     "@chakra-ui/react": "^2.3.1",
     "@emotion/react": "^11.10.4",
     "@emotion/styled": "^11.10.4",
+    "@reduxjs/toolkit": "^1.8.5",
     "framer-motion": "^6.5.1",
     "lodash": "^4.17.21",
     "next": "12.2.5",
+    "next-redux-wrapper": "^8.0.0",
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "react-icons": "^4.4.0",
+    "react-redux": "^8.0.2",
+    "redux": "^4.2.0",
+    "redux-devtools-extension": "^2.13.9",
+    "redux-thunk": "^2.4.1",
     "yup": "^0.32.11"
   },
   "devDependencies": {

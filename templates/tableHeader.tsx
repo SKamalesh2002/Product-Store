@@ -34,14 +34,18 @@ function TableHeader({ columns, sortColumn, onSort }: tableHeaderProps) {
     else return <ArrowDownIcon fontSize="md" pb="1" />;
   };
   return (
-    <Thead>
+    <Thead background="black">
       <Tr>
         {columns.map((column: column) => (
           <Th
+            align="center"
+            alignContent="center"
             key={column.path || column.key}
             fontSize="sm"
             pt="5"
+            pb="4"
             cursor="pointer"
+            textColor="white"
             onClick={() => {
               if (column.path) raiseSort(column.path);
             }}

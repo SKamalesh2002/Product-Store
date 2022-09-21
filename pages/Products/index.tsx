@@ -89,69 +89,59 @@ const Products: FC<Props> = () => {
   const { totalCount, data: pageProducts } = getPageData();
 
   return (
-    <Flex h="vh" w="vh" background="gray.100">
+    <Flex h="100vh" w="100vp" background="gray.100">
       <Grid
-        background="gray.100"
         templateAreas={`
-        "header"
-        "body"`}
-      >
-        <GridItem area="header" w="180vh">
-          <NavBar />
-        </GridItem>
-        <GridItem
-          position="absolute"
-          area="body"
-          background="gray.100"
-          pl="10"
-          mt="100"
-        >
-          <Grid
-            templateAreas={`
               "nav main"
               "nav footer"`}
-          >
-            <GridItem area="nav">
-              <ListGroup
-                categories={categories}
-                onItemSelect={handleCategorySelect}
-                selectedItem={currentCategory}
-              />
-            </GridItem>
-            <GridItem area="main" p="5">
-              <Box>
-                <Link href="../Products/newProductForm">
-                  <a href="">
-                    <Button size="sm" colorScheme="messenger">
-                      New Product
-                    </Button>
-                  </a>
-                </Link>
-                <Text p="3">{`Currently Showing ${totalCount} products`}</Text>
-              </Box>
-              <Input
-                placeholder="Search Title..."
-                background="white"
-                mb="4"
-                value={search}
-                onChange={(ev) => handleType(ev.target.value)}
-              />
-              <ProductTable
-                products={pageProducts}
-                onDelete={handleDelete}
-                sortColumn={sortColumn}
-                onSort={handleSort}
-              />
-            </GridItem>
-            <GridItem area="footer">
-              <Pagination
-                itemCount={totalCount}
-                pageSize={pageSize}
-                onPageChange={handlePageChange}
-                currentPage={currentPage}
-              ></Pagination>
-            </GridItem>
-          </Grid>
+        pl="1em"
+      >
+        <GridItem area="nav">
+          <ListGroup
+            categories={categories}
+            onItemSelect={handleCategorySelect}
+            selectedItem={currentCategory}
+          />
+        </GridItem>
+        <GridItem area="main" p="5">
+          <Box>
+            <Link href="../Products/newProductForm">
+              <a href="">
+                <Button
+                  size="sm"
+                  bgGradient="linear(to-tr, #09C6F9, #045DE9)"
+                  _hover={{ bgGradient: "linear(to-tl, #09C6F9, #045DE9)" }}
+                  textColor="white"
+                >
+                  New Product
+                </Button>
+              </a>
+            </Link>
+            <Text p="3">{`Currently Showing ${totalCount} products`}</Text>
+          </Box>
+          <Input
+            placeholder="Search Title..."
+            background="white"
+            border="2px"
+            borderColor="black"
+            mb="4"
+            value={search}
+            onChange={(ev) => handleType(ev.target.value)}
+          />
+          <ProductTable
+            products={pageProducts}
+            onDelete={handleDelete}
+            sortColumn={sortColumn}
+            onSort={handleSort}
+          />
+        </GridItem>
+        <GridItem area="footer" pos="relative">
+          <Pagination
+            itemCount={totalCount}
+            pageSize={pageSize}
+            onPageChange={handlePageChange}
+            currentPage={currentPage}
+          ></Pagination>
         </GridItem>
       </Grid>
     </Flex>

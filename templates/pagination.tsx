@@ -1,6 +1,6 @@
 import { FC } from "react";
 import _ from "lodash";
-import { Box, Flex } from "@chakra-ui/react";
+import { background, Box, Flex } from "@chakra-ui/react";
 
 interface Props {
   itemCount: number;
@@ -32,13 +32,24 @@ const Pagination: FC<Props> = ({
           key={pageNumber}
           borderRight="1px"
           borderColor="gray.100"
-          _hover={{ bg: "gray.200" }}
           cursor="pointer"
           pl="2"
           pr="2"
           pt="1"
           pb="1"
           onClick={() => onPageChange(pageNumber)}
+          transitionDelay="50ms"
+          {...(currentPage === pageNumber
+            ? {
+                background: "black",
+                textColor: "white",
+                _hover: { bg: "" },
+              }
+            : {
+                background: "inherit",
+                textColor: "inherit",
+                _hover: { bg: "gray.200" },
+              })}
         >
           {pageNumber}
         </Box>
