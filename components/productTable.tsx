@@ -1,10 +1,10 @@
-import { Welcome } from "./fakeProducts";
+import type { Welcome } from "../types/productType";
+import type { sortColumn } from "../types/tableTypes";
+
 import TableLayout from "../templates/tableLayout";
 
 import { Button, Link as LinkTemplate } from "@chakra-ui/react";
 import Link from "next/link";
-
-import { sortColumn } from "../pages/Products/index";
 
 interface Props {
   products: Welcome[];
@@ -33,14 +33,9 @@ export default function ProductTable({
       key: "",
       content: (column: Welcome) => {
         return (
-          // <Link href={`Products/ProductForm/${column.id}`}>
-          //   <a>
-
           <LinkTemplate as={Link} href={`Products/ProductForm/${column.id}`}>
             {column.title}
           </LinkTemplate>
-          //   </a>
-          // </Link>
         );
       },
     },

@@ -1,22 +1,5 @@
-export interface Welcome {
-  id: number;
-  title: string;
-  price: number;
-  description: string;
-  category: category;
-  image: string;
-  rating: Rating;
-}
+import type { Welcome, category } from "../types/productType";
 
-export interface Rating {
-  rate: number;
-  count: number;
-}
-
-export interface category {
-  id: number | null;
-  name: string;
-}
 export const categories: category[] = [
   { id: 1, name: "Men's Clothing" },
   { id: 2, name: "Women's Clothing" },

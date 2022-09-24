@@ -1,8 +1,6 @@
-import * as product from "../../components/fakeProducts";
+import type { Welcome, category } from "../../types/productType";
+import type { sortColumn } from "../../types/tableTypes";
 
-import { Welcome, category } from "../../components/fakeProducts";
-
-import ProductTable from "../../components/productTable";
 import { useState, FC } from "react";
 import Link from "next/link";
 import _ from "lodash";
@@ -15,81 +13,50 @@ import {
   Box,
   Input,
 } from "@chakra-ui/react";
+
+import ProductTable from "../../components/productTable";
 import ListGroup from "../../templates/listGroup";
 import Pagination from "../../templates/pagination";
-import { paginate } from "../../utils/paginate";
-import NavBar from "../../components/navBar";
+
+import {
+  GET_PRODUCT,
+  DELETE_PRODUCT,
+  SAVE_PRODUCT,
+  CATEGORY_SELECT,
+  PAGE_CHANGE,
+  SEARCH,
+  productsSelector,
+  categoriesSelector,
+  currentCategorySelector,
+  pageSizeSelector,
+  currentPageSelector,
+  SORT,
+  totalCountSelector,
+  sortColumnSelector,
+  searchSelector,
+} from "../../store/slices/productSlice";
+import { useDispatch, useSelector } from "react-redux";
+import type { RootState } from "../../store/store";
+import Counter from "../../components/counter";
 
 interface Props {}
 
-export interface sortColumn {
-  path: string;
-  order: boolean | "asc" | "desc";
-}
-
 const Products: FC<Props> = () => {
-  const [products, setProducts] = useState<Welcome[]>(product.getProducts());
-  const [categories] = useState<category[]>([
-    { id: null, name: "All category" },
-    ...product.getCateories(),
-  ]);
-  const [currentCategory, setCurrentCategory] = useState<category>({
-    id: null,
-    name: "All category",
-  });
-  const [currentPage, setCurrentPage] = useState<number>(1);
-  const [pageSize] = useState<number>(8);
-  const [sortColumn, setSortColumn] = useState<sortColumn>({
-    path: "title",
-    order: "asc",
-  });
-  const [search, setSearch] = useState<string>("");
+  const dispatch = useDispatch();
 
-  const handleCategorySelect = (category: category): void => {
-    setCurrentCategory(category);
-    setCurrentPage(1);
-  };
+  const products = useSelector(productsSelector);
+  const categories = useSelector(categoriesSelector);
+  const currentCategory = useSelector(currentCategorySelector);
+  const pageSize = useSelector(pageSizeSelector);
+  const currentPage = useSelector(currentPageSelector);
+  const totalCount = useSelector(totalCountSelector);
+  const sortColumn = useSelector(sortColumnSelector);
+  const search = useSelector(searchSelector);
 
-  const handleSort = (sortColumn: sortColumn) => {
-    setSortColumn(sortColumn);
-  };
-  const handleDelete = (product: Welcome): void => {
-    setProducts(products.filter((p) => p.id !== product.id));
-  };
-
-  const searchData = (search: string) => {
-    return products.filter((m) =>
-      m.title.toLowerCase().startsWith(search.toLowerCase())
-    );
-  };
-
-  const handlePageChange = (pageNumber: number): void => {
-    setCurrentPage(pageNumber);
-  };
-
-  const handleType = (search: string) => {
-    setCurrentPage(1);
-    setSearch(search);
-    setCurrentCategory({ id: null, name: "All Category" });
-  };
-
-  const getPageData = (): { totalCount: number; data: Welcome[] } => {
-    const filtered = search
-      ? searchData(search)
-      : currentCategory && currentCategory.id
-      ? products.filter((p) => p.category.id === currentCategory.id)
-      : products;
-
-    const sorted = _.orderBy(filtered, [sortColumn.path], [sortColumn.order]);
-    const pageProducts = paginate(sorted, currentPage, pageSize);
-
-    return { totalCount: filtered.length, data: pageProducts };
-  };
-
-  const { totalCount, data: pageProducts } = getPageData();
+  const count = useSelector((state: RootState) => state.counter.value);
 
   return (
-    <Flex h="100vh" w="100vp" background="gray.100">
+    <Flex h="100vh" w="100vp" background="gray.100" overflow="hidden">
       <Grid
         templateAreas={`
               "nav main"
@@ -99,7 +66,9 @@ const Products: FC<Props> = () => {
         <GridItem area="nav">
           <ListGroup
             categories={categories}
-            onItemSelect={handleCategorySelect}
+            onItemSelect={(category: category): void => {
+              dispatch(CATEGORY_SELECT(category));
+            }}
             selectedItem={currentCategory}
           />
         </GridItem>
@@ -118,6 +87,10 @@ const Products: FC<Props> = () => {
               </a>
             </Link>
             <Text p="3">{`Currently Showing ${totalCount} products`}</Text>
+            <Text>
+              {count}
+              <Counter />
+            </Text>
           </Box>
           <Input
             placeholder="Search Title..."
@@ -126,20 +99,31 @@ const Products: FC<Props> = () => {
             borderColor="black"
             mb="4"
             value={search}
-            onChange={(ev) => handleType(ev.target.value)}
+            onChange={(ev) => {
+              const search = ev.target.value;
+              dispatch(PAGE_CHANGE(1));
+              dispatch(SEARCH(search));
+              dispatch(CATEGORY_SELECT({ id: null, name: "All Category" }));
+            }}
           />
           <ProductTable
-            products={pageProducts}
-            onDelete={handleDelete}
+            products={products}
+            onDelete={(product: Welcome): void => {
+              dispatch(DELETE_PRODUCT(product.id));
+            }}
             sortColumn={sortColumn}
-            onSort={handleSort}
+            onSort={(sortColumn: sortColumn) => {
+              dispatch(SORT(sortColumn));
+            }}
           />
         </GridItem>
         <GridItem area="footer" pos="relative">
           <Pagination
             itemCount={totalCount}
             pageSize={pageSize}
-            onPageChange={handlePageChange}
+            onPageChange={(pageNumber: number): void => {
+              dispatch(PAGE_CHANGE(pageNumber));
+            }}
             currentPage={currentPage}
           ></Pagination>
         </GridItem>
