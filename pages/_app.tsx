@@ -5,13 +5,13 @@ import NavBar from "../components/navBar";
 
 import { store } from "../store/store";
 import { Provider } from "react-redux";
+import Layout from "../components/layout";
 
 function MyApp({ Component, pageProps }: AppProps) {
   return (
     <Provider store={store}>
       <ChakraProvider>
-        <NavBar />
-        <Component {...pageProps} />
+        <Layout view={<Component {...pageProps} />} />
       </ChakraProvider>
     </Provider>
   );

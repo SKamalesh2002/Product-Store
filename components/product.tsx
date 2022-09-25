@@ -14,7 +14,7 @@ import {
 
 import * as React from "react";
 
-import { Welcome } from "./fakeProducts";
+import { Welcome } from "../types/productType";
 
 interface Props {
   product: Welcome;

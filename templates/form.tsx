@@ -1,3 +1,5 @@
+import type { field, button } from "../types/formTypes";
+
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import { FC } from "react";
 import {
@@ -9,22 +11,6 @@ import {
   Text,
   VStack,
 } from "@chakra-ui/react";
-
-import Link from "next/link";
-
-interface field {
-  id: number;
-  label: string;
-  name: string;
-  type: string;
-  options?: string[];
-}
-
-interface button {
-  id: number;
-  name: string;
-  label: string;
-}
 
 interface Props {
   initialValues: any;
@@ -103,6 +89,7 @@ const FormTemplate: FC<Props> = ({
           {buttons
             ? buttons.map((button) => (
                 <Button
+                  key={button.label}
                   type="submit"
                   w="full"
                   colorScheme="messenger"

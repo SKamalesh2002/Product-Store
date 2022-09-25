@@ -1,40 +1,18 @@
+import type { initialValues, field, button } from "../../types/formTypes";
+
 import { FC, useState } from "react";
 import FormTemplate from "../../templates/form";
 import * as yup from "yup";
-import {
-  categories,
-  saveProducts,
-  Welcome,
-} from "../../components/fakeProducts";
 
 import { Flex, Box } from "@chakra-ui/react";
 
 import { useRouter } from "next/router";
+import { categories } from "../../components/fakeProducts";
+import { Welcome } from "../../types/productType";
+import { useDispatch } from "react-redux";
+import { SAVE_PRODUCT } from "../../store/slices/productSlice";
 interface Props {
   data: initialValues;
-}
-
-interface initialValues {
-  title: string;
-  category: string;
-  price: number;
-  rating: number;
-  description: string;
-  image: string;
-}
-
-interface field {
-  id: number;
-  label: string;
-  name: string;
-  type: string;
-  options?: string[];
-}
-
-interface button {
-  id: number;
-  name: string;
-  label: string;
 }
 
 const NewProductForm: FC<Props> = ({ data }) => {
@@ -84,8 +62,12 @@ const NewProductForm: FC<Props> = ({ data }) => {
     { id: 0, name: "submit", label: "Submit" },
   ]);
 
+  const dispatch = useDispatch();
+
   const onSubmit = (values: initialValues) => {
     let newProduct = {} as Welcome;
+
+    if (values.id) newProduct.id = values.id;
     newProduct.title = values.title;
     newProduct.description = values.description;
     newProduct.price = values.price;
@@ -93,7 +75,8 @@ const NewProductForm: FC<Props> = ({ data }) => {
     newProduct.rating = { count: values.rating * 3, rate: values.rating };
     newProduct.category = { id: -1, name: values.category };
 
-    saveProducts(newProduct);
+    console.log(newProduct);
+    dispatch(SAVE_PRODUCT(newProduct));
 
     router.push("/");
   };

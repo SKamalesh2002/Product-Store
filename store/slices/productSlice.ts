@@ -56,9 +56,10 @@ const getPageData = (
   return { totalCount: filtered.length, data: pageProducts };
 };
 
+const products = getProducts();
 const initialState: initialState = {
-  products: getProducts(),
-  viewData: paginate(getProducts(), 1, 8),
+  products: products,
+  viewData: paginate(products, 1, 8),
   categories: categories,
   currentCategory: { id: null, name: "All category" },
   currentPage: 1,
@@ -66,6 +67,7 @@ const initialState: initialState = {
   sortColumn: { path: "title", order: "asc" },
   search: "",
   totalCount: getProducts().length,
+  product: undefined,
 };
 
 export const productSlice = createSlice({
@@ -74,8 +76,6 @@ export const productSlice = createSlice({
   reducers: {
     GET_PRODUCT: (state, action: PayloadAction<number>) => {
       state.product = state.products.find((p) => p.id === action.payload);
-
-      console.log(state.product);
     },
 
     DELETE_PRODUCT: (state, action: PayloadAction<number>) => {
@@ -88,10 +88,14 @@ export const productSlice = createSlice({
       state.totalCount = getPageData(state).totalCount;
     },
 
-    SAVE_PRODUCT: ({ products }, action: PayloadAction<Welcome>) => {
-      let productInDb: Welcome =
-        products.find((p) => p.id === action.payload.id) || ({} as Welcome);
+    SAVE_PRODUCT: (state, action: PayloadAction<Welcome>) => {
+      console.log(action.payload);
+      let productInDb: Welcome | undefined =
+        state.products.find((p) => p.id === action.payload.id) ||
+        ({} as Welcome);
 
+      console.log(productInDb.id);
+      productInDb.id = action.payload.id;
       productInDb.title = action.payload.title;
       productInDb.price = action.payload.price;
       productInDb.image = action.payload.image;
@@ -105,14 +109,17 @@ export const productSlice = createSlice({
       if (category) productInDb.category = category;
       else
         category = {
-          id: products.length + 1,
+          id: state.products.length + 1,
           name: action.payload.category.name,
         };
 
       if (!productInDb.id) {
-        productInDb.id = products.length + 1;
-        products.push(productInDb);
+        productInDb.id = state.products.length + 1;
+        state.products.push(productInDb);
       }
+
+      state.viewData = getPageData(state).data;
+      state.totalCount = getPageData(state).totalCount;
     },
 
     CATEGORY_SELECT: (state, action: PayloadAction<category>) => {
@@ -125,8 +132,8 @@ export const productSlice = createSlice({
     PAGE_CHANGE: (state, action: PayloadAction<number>) => {
       state.currentPage = action.payload;
 
-      const data = getPageData(state).data;
-      state.viewData = data;
+      state.viewData = getPageData(state).data;
+
       state.totalCount = getPageData(state).totalCount;
     },
 

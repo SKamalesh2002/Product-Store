@@ -1,22 +1,29 @@
 import { FC } from "react";
 
-import { Box, Flex, Heading, Spacer, Text, HStack } from "@chakra-ui/react";
+import { Box, Flex, Heading, Spacer, Text, Stack } from "@chakra-ui/react";
 import Link from "next/link";
 
 interface Props {}
 
 const NavBar: FC<Props> = () => {
   return (
-    <Box bg="black" textColor="white" p="5">
+    <Flex
+      justify="center"
+      bg="blue"
+      flexDirection="row"
+      maxH="160vh"
+      maxW="160vh"
+    >
       <Flex>
         <Link href="/">
           <a>
             <Heading>Product Store</Heading>
           </a>
         </Link>
+      </Flex>
 
-        <Spacer />
-        <HStack pr="10">
+      <Flex justify="end">
+        <Stack as={Flex} flexDirection="row" pr="10" justify="flex-end">
           <Link href="../Products/loginForm">
             <a>
               <Text>Login</Text>
@@ -27,9 +34,9 @@ const NavBar: FC<Props> = () => {
               <Text>Register</Text>
             </a>
           </Link>
-        </HStack>
+        </Stack>
       </Flex>
-    </Box>
+    </Flex>
   );
 };
 

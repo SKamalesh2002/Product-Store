@@ -63,7 +63,7 @@ const Products: FC<Props> = () => {
               "nav footer"`}
         pl="1em"
       >
-        <GridItem area="nav">
+        {/* <GridItem area="nav">
           <ListGroup
             categories={categories}
             onItemSelect={(category: category): void => {
@@ -71,7 +71,7 @@ const Products: FC<Props> = () => {
             }}
             selectedItem={currentCategory}
           />
-        </GridItem>
+        </GridItem> */}
         <GridItem area="main" p="5">
           <Box>
             <Link href="../Products/newProductForm">
